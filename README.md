@@ -18,7 +18,7 @@
 </div>
 
 <div align="center">
-  Department of Electrical and Computer Engineering, National University of Singapore, <a href="https://sites.google.com/site/sitexinchaowang/" target="_blank">xML Lab</a>
+  <a href="https://sites.google.com/site/sitexinchaowang/" target="_blank">xML Lab</a>, Department of Electrical and Computer Engineering, National University of Singapore
 </div>
 
 <br>
