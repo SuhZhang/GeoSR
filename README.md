@@ -135,6 +135,67 @@ Notes:
 - `train_qa_pairs.json` / `train_qa_pairs.parquet` are the released training QA files.
 - The corresponding videos should be downloaded directly from the official [Koala-36M](https://github.com/KlingTeam/Koala-36M) release instead of being regenerated in this repository.
 
+## Training and Evaluation
+
+Below are direct command examples for the two task-specific branches. Each block starts from the repository root so that the commands can be copied and run as-is.
+
+### Static Branch
+
+Train GeoSR for static spatial reasoning:
+
+```bash
+cd GeoSR
+git checkout static
+
+bash scripts/train/train.sh \
+  --vision-mask-apply-prob 0.5 \
+  --vision-mask-prob 0.8 \
+  --output-dir ./outputs/geosr3d_train
+```
+
+Evaluate the static model on `VSI-Bench`:
+
+```bash
+cd GeoSR
+git checkout static
+
+MODEL_PATH=./outputs/geosr3d_train \
+BENCHMARK=vsibench \
+OUTPUT_PATH=./outputs/eval_static \
+bash scripts/evaluation/eval.sh
+```
+
+### Dynamic Branch
+
+Train GeoSR for dynamic spatial reasoning:
+
+```bash
+cd GeoSR
+git checkout dynamic
+cd model/qwen-vl-finetune
+
+bash train.sh \
+  --vision-mask-prob 0.8 \
+  --vision-mask-apply-prob 0.5 \
+  --output-dir ./outputs/geosr4d_train
+```
+
+Evaluate the dynamic model on `DSR-Bench`:
+
+```bash
+cd GeoSR
+git checkout dynamic
+cd model/qwen-vl-finetune/VLMEvalKit_mine
+
+GEOSR4D_BENCH_VIDEO_ROOT=../../../data/DSR_Suite/videos_bench \
+GEOSR4D_BENCH_PARQUET=../../../data/DSR_Suite/benchmark.parquet \
+GEOSR4D_EVAL_MODEL_PATH=../outputs/geosr4d_train \
+python run.py \
+  --data Spatial-Reasoning \
+  --model Qwen2.5-VL-7B-Instruct-ForVideo-Spatial \
+  --work-dir ./outputs
+```
+
 ## Abstract
 
 Empowered by large-scale training, VLMs have achieved strong image and video understanding, yet their ability to perform spatial reasoning in both static scenes and dynamic videos remains limited. Recent approaches attempt to improve this by injecting geometry tokens from pretrained 3D foundation models into VLMs. However, we find that naive geometry fusion followed by standard fine-tuning often leaves these cues underused, because the model can still rely on appearance-driven 2D shortcuts.

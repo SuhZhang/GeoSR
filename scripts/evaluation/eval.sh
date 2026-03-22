@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
-export LMMS_EVAL_LAUNCHER="${LMMS_EVAL_LAUNCHER:-accelerate}"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
-WORKSPACE_ROOT="$(cd -- "${PROJECT_ROOT}/.." && pwd)"
 cd "${PROJECT_ROOT}"
 
-# lmms_eval lives under src/, ensure workers launched by accelerate can import it.
+# lmms_eval lives under src/, ensure the local package can be imported.
 export PYTHONPATH="${PROJECT_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
-export NCCL_NVLS_ENABLE=0
 
 benchmark="${BENCHMARK:-vsibench}" # choices: [vsibench, cvbench, blink_spatial]
 output_path="${OUTPUT_PATH:-${PROJECT_ROOT}/logs/$(TZ="Asia/Shanghai" date "+%Y%m%d")}"
-default_model_path="${WORKSPACE_ROOT}/GeoSR3D_train/ori_DS2opt_small"
+default_model_path="${PROJECT_ROOT}/outputs/geosr3d_train"
 model_path="${MODEL_PATH:-${default_model_path}}"
-num_processes="${NUM_PROCESSES:-8}"
+
+if command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="python"
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="python3"
+else
+    echo "Error: neither python nor python3 was found in PATH." >&2
+    exit 1
+fi
 
 if [[ -d "${model_path}" ]]; then
     model_path="$(cd -- "${model_path}" && pwd)"
@@ -33,7 +38,7 @@ echo "Using model_path: ${model_path}"
 echo "Running benchmark: ${benchmark}"
 echo "Output path: ${output_path}"
 
-accelerate launch --num_processes="${num_processes}" -m lmms_eval \
+"${PYTHON_BIN}" -m lmms_eval \
     --model geosr3d \
     --model_args pretrained="${model_path}",use_flash_attention_2=true,max_num_frames=32,max_length=12800 \
     --tasks "${benchmark}" \
