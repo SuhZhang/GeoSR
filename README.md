@@ -4,6 +4,9 @@
   <a href="https://github.com/SuhZhang/GeoSR" target="_blank">
     <img alt="Code" src="https://img.shields.io/badge/Code-GeoSR-black?logo=github" height="20" />
   </a>
+  <a href="https://suhzhang.github.io/GeoSR/" target="_blank">
+    <img alt="Project Page" src="https://img.shields.io/badge/Project-Page-0A7EA4" height="20" />
+  </a>
 </div>
 
 <div align="center">
