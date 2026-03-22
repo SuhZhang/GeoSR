@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="GeoSR makes geometry matter for spatial reasoning in vision-language models through Geometry-Unleashing Masking and Geometry-Guided Fusion.">
+  <meta name="keywords" content="GeoSR, Spatial Reasoning, VLM, Geometry Tokens, VSI-Bench, DSR-Bench">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GeoSR: Make Geometry Matter for Spatial Reasoning</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script defer src="./static/js/index.js"></script>
+
+  <style>
+    /* ---------- Hero title: force one line ---------- */
+    .publication-title.one-line-title {
+      white-space: nowrap;
+      font-size: clamp(1.6rem, 3vw, 3.1rem) !important;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      max-width: 1150px;
+      margin: 0 auto 1rem auto;
+    }
+
+    /* ---------- Keep some section titles compact ---------- */
+    .single-line-title {
+      white-space: nowrap;
+      font-size: clamp(1.45rem, 2.3vw, 1.9rem);
+      line-height: 1.2;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    /* ---------- Method: combine into one card ---------- */
+    .method-combined-card .method-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .method-combined-card .method-subblock .title {
+      margin-bottom: 0.5rem;
+    }
+
+    .method-combined-card .method-subblock p {
+      margin-bottom: 1rem;
+    }
+
+    .method-combined-card .method-figure-wrap {
+      margin-top: 1.25rem;
+    }
+
+    .method-combined-card .method-figure-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 18px;
+    }
+
+    /* ---------- Remove metric row ---------- */
+    .results-mini {
+      display: none !important;
+    }
+
+    /* ---------- Qualitative figures fully visible ---------- */
+    .qualitative-block .image-frame,
+    .qualitative-block .tall-frame {
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+    }
+
+    .qualitative-block .image-frame img,
+    .qualitative-block .tall-frame img {
+      display: block;
+      width: 100%;
+      height: auto !important;
+      max-height: none !important;
+      object-fit: contain !important;
+      object-position: top center;
+    }
+
+    /* ---------- Ambiguity cases stack vertically ---------- */
+    .ambiguity-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .ambiguity-case {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ambiguity-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .paper-card a,
+    .abstract-card a,
+    .section a,
+    .publication-authors .author-block a {
+      color: #2b6cb0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease, text-decoration-color 0.2s ease;
+    }
+
+    .paper-card a:hover,
+    .abstract-card a:hover,
+    .section a:hover,
+    .publication-authors .author-block a:hover {
+      color: #1f4f82;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media screen and (max-width: 1023px) {
+      .method-combined-card .method-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .publication-title.one-line-title {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container is-max-desktop">
+    <div class="navbar-brand">
+      <a class="navbar-item nav-home" href="https://github.com/SuhZhang/GeoSR" target="_blank" rel="noreferrer">
+        <span class="icon">
+          <i class="fab fa-github"></i>
+        </span>
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item nav-anchor" href="#abstract">Abstract</a>
+        <a class="navbar-item nav-anchor" href="#method">Method</a>
+        <a class="navbar-item nav-anchor" href="#results">Results</a>
+        <a class="navbar-item nav-anchor" href="#qualitative">Qualitative</a>
+        <a class="navbar-item nav-anchor" href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero publication-header">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths has-text-centered">
+          <p class="hero-kicker">Project Page</p>
+          <h1 class="title is-1 publication-title one-line-title">Make Geometry Matter for Spatial Reasoning</h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="mailto:suhzhang001@gmail.com">Shihua Zhang</a>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:qiuhong.shen@u.nus.edu">Qiuhong Shen</a>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:shizun.wang@u.nus.edu">Shizun Wang</a>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:e1583392@u.nus.edu">Tianbo Pan</a>,
+            </span>
+            <span class="author-block">
+              <a href="mailto:xinchao@nus.edu.sg">Xinchao Wang<sup>*</sup></a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Department of Electrical and Computer Engineering, National University of Singapore</span>
+          </div>
+
+          <div class="is-size-6 publication-authors publication-note">
+            <span class="author-block">GeoSR encourages VLMs to actively reason with geometry in both static and dynamic spatial settings.</span>
+          </div>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://github.com/SuhZhang/GeoSR" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noreferrer">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#results" class="external-link button is-normal is-rounded is-light">
+                <span class="icon">
+                  <i class="fas fa-chart-line"></i>
+                </span>
+                <span>Results</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#qualitative" class="external-link button is-normal is-rounded is-light">
+                <span class="icon">
+                  <i class="far fa-images"></i>
+                </span>
+                <span>Qualitative</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#bibtex" class="external-link button is-normal is-rounded is-light">
+                <span class="icon">
+                  <i class="fas fa-quote-right"></i>
+                </span>
+                <span>BibTeX</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section teaser-section">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Key Observation</p>
+      <h2 class="title is-3 section-title single-line-title">Existing methods underutilize geometry for spatial reasoning.</h2>
+      <p class="section-copy">
+        Under naive token fusion and standard fine-tuning, geometry tokens are underutilized for spatial reasoning: gains are limited in static scenes and can turn negative in dynamic settings, as VLMs tend to fall back to appearance-driven 2D shortcuts. GeoSR is designed to address this failure mode.
+      </p>
+    </div>
+
+    <div class="columns is-variable is-5">
+      <div class="column">
+        <div class="paper-card">
+          <h3 class="title is-5">Static Spatial Reasoning</h3>
+          <div class="image-frame">
+            <img src="./assets/static-radar.png" alt="Static reasoning radar chart.">
+          </div>
+          <p class="figure-caption">
+            On <a href="https://github.com/vision-x-nyu/thinking-in-space" target="_blank" rel="noreferrer">VSI-Bench</a>, naive geometry fusion yields only marginal gains, while GeoSR consistently improves the geometry-aware baseline.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="paper-card">
+          <h3 class="title is-5">Dynamic Spatial Reasoning</h3>
+          <div class="image-frame">
+            <img src="./assets/dynamic-radar.png" alt="Dynamic reasoning radar chart.">
+          </div>
+          <p class="figure-caption">
+            On <a href="https://github.com/TencentARC/DSR_Suite" target="_blank" rel="noreferrer">DSR-Bench</a>, uncontrolled geometry fusion can underperform the no-geometry baseline, while GeoSR turns geometry into a clear advantage.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="paper-card abstract-card">
+          <p class="section-kicker">Abstract</p>
+          <div class="content has-text-justified abstract-copy">
+          <p>
+            Empowered by large-scale training, vision-language models (VLMs) achieve strong image and video understanding, yet their ability to perform spatial reasoning in both static scenes and dynamic videos remains limited. Recent advances try to handle this limitation by injecting geometry tokens from pretrained 3D foundation models into VLMs. Nevertheless, we observe that naive token fusion followed by standard fine-tuning in this line of work often leaves such geometric cues underutilized for spatial reasoning, as VLMs tend to rely heavily on 2D visual cues. In this paper, we propose <strong>GeoSR</strong>, a framework designed to make geometry matter by encouraging VLMs to actively reason with geometry tokens. <strong>GeoSR</strong> introduces two key components: (1) <em>Geometry-Unleashing Masking</em>, which strategically masks portions of 2D vision tokens during training to weaken non-geometric shortcuts and force the model to consult geometry tokens for spatial reasoning; and (2) <em>Geometry-Guided Fusion</em>, a gated routing mechanism that adaptively amplifies geometry token contributions in regions where geometric evidence is critical. Together, these designs unleash the potential of geometry tokens for spatial reasoning tasks. Extensive experiments on both static and dynamic spatial reasoning benchmarks demonstrate that <strong>GeoSR</strong> consistently outperforms prior methods and establishes new state-of-the-art performance by effectively leveraging geometric information.
+          </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft" id="method">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Method</p>
+      <h2 class="title is-3 section-title single-line-title">Making geometry truly matter for spatial reasoning.</h2>
+      <p class="section-copy">
+        GeoSR builds on the standard geometry-aware VLM pipeline with two targeted components: one applied during training and one during fusion.
+      </p>
+    </div>
+
+    <div class="paper-card feature-card">
+      <div class="columns is-variable is-6 is-vcentered">
+        <div class="column is-5">
+          <p class="card-kicker">Baseline Framework</p>
+          <h3 class="title is-4">Geometry-Aware VLM</h3>
+          <p class="feature-copy">
+            A pretrained geometry tokenizer extracts geometry tokens that are fused with standard vision tokens before the VLM answers the query. GeoSR does not replace this pipeline, it makes the geometry stream matter more during reasoning.
+          </p>
+        </div>
+        <div class="column is-7">
+          <div class="image-frame">
+            <img src="./assets/framework.png" alt="Overview of the geometry-aware framework used by GeoSR.">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paper-card feature-card method-combined-card">
+      <div class="method-columns">
+        <div class="method-subblock">
+          <p class="card-kicker">Effective Geometry Usage</p>
+          <h3 class="title is-5">Geometry-Unleashing Masking</h3>
+          <p>
+            GeoSR masks a subset of 2D visual tokens during training. For static reasoning, masking is random. For dynamic reasoning, it is driven by question-relevant geometry attention. This weakens appearance shortcuts and forces the model to consult geometry.
+          </p>
+        </div>
+
+        <div class="method-subblock">
+          <p class="card-kicker">Reasonable Geometry Usage</p>
+          <h3 class="title is-5">Geometry-Guided Fusion</h3>
+          <p>
+            A learned token- and channel-wise gate mixes masked visual features with geometry features. Instead of uniformly injecting geometry, GeoSR amplifies it only where geometric evidence is actually needed.
+          </p>
+        </div>
+      </div>
+
+      <div class="method-figure-wrap image-frame">
+        <img src="./assets/module.png" alt="Overview of Geometry-Unleashing Masking and Geometry-Guided Fusion.">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Results</p>
+      <h2 class="title is-3 section-title single-line-title">Stronger reasoning on both static and dynamic benchmarks.</h2>
+      <p class="section-copy">
+        GeoSR improves over geometry-aware baselines on rigid scenes with viewpoint changes and on dynamic scenes with evolving spatial relations.
+      </p>
+    </div>
+
+    <div class="columns is-variable is-5">
+      <div class="column">
+        <div class="paper-card">
+          <p class="card-kicker">Static Spatial Reasoning</p>
+          <h3 class="title is-4">
+            <a href="https://github.com/vision-x-nyu/thinking-in-space" target="_blank" rel="noreferrer">VSI-Bench</a>
+          </h3>
+          <p class="benchmark-summary">
+            GeoSR achieves the best overall average score of <strong>51.9</strong>, improving the strongest geometry-aware baseline <strong><a href="https://github.com/LaVi-Lab/VG-LLM" target="_blank" rel="noreferrer">VG-LLM</a></strong> by <strong>+1.2</strong>.
+          </p>
+          <div class="table-container">
+            <table class="table is-fullwidth is-hoverable">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Avg.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Qwen2.5-VL-7B</td>
+                  <td>33.0</td>
+                </tr>
+                <tr>
+                  <td><a href="https://github.com/THU-SI/Spatial-MLLM" target="_blank" rel="noreferrer">Spatial-MLLM</a></td>
+                  <td>48.4</td>
+                </tr>
+                <tr>
+                  <td><a href="https://github.com/LaVi-Lab/VG-LLM" target="_blank" rel="noreferrer">VG-LLM</a></td>
+                  <td>50.7</td>
+                </tr>
+                <tr class="is-selected-row">
+                  <td>GeoSR</td>
+                  <td>51.9</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="paper-card">
+          <p class="card-kicker">Dynamic Spatial Reasoning</p>
+          <h3 class="title is-4">
+            <a href="https://github.com/TencentARC/DSR_Suite" target="_blank" rel="noreferrer">DSR-Bench</a>
+          </h3>
+          <p class="benchmark-summary">
+            GeoSR reaches <strong>66.1</strong> average accuracy, surpassing <strong><a href="https://github.com/TencentARC/DSR_Suite" target="_blank" rel="noreferrer">GSM</a></strong> by <strong>+7.2</strong> points and ranking first on all reported dynamic subtask categories.
+          </p>
+          <div class="table-container">
+            <table class="table is-fullwidth is-hoverable">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Avg.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Qwen2.5-VL-7B</td>
+                  <td>23.5</td>
+                </tr>
+                <tr>
+                  <td><a href="https://github.com/LaVi-Lab/VG-LLM" target="_blank" rel="noreferrer">VG-LLM</a></td>
+                  <td>38.4</td>
+                </tr>
+                <tr>
+                  <td><a href="https://github.com/TencentARC/DSR_Suite" target="_blank" rel="noreferrer">GSM</a></td>
+                  <td>58.9</td>
+                </tr>
+                <tr class="is-selected-row">
+                  <td>GeoSR</td>
+                  <td>66.1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-multiline is-variable is-4 results-mini">
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="metric-box">
+          <p class="metric-value">0.41s</p>
+          <p class="metric-label">Inference time</p>
+        </div>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="metric-box">
+          <p class="metric-value">9.23B</p>
+          <p class="metric-label">Model size</p>
+        </div>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="metric-box">
+          <p class="metric-value">18.95GB</p>
+          <p class="metric-label">Peak memory</p>
+        </div>
+      </div>
+      <div class="column is-3-desktop is-6-tablet">
+        <div class="metric-box">
+          <p class="metric-value">γ = 0.8</p>
+          <p class="metric-label">Best masking ratio</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft" id="qualitative">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Qualitative Results</p>
+      <h2 class="title is-3 section-title">Qualitative results and ambiguity cases.</h2>
+      <p class="section-copy">
+        GeoSR improves qualitative results on both benchmarks, while we also highlight cases where the benchmark itself remains ambiguous.
+      </p>
+    </div>
+
+    <div class="qualitative-stack">
+      <div class="paper-card qualitative-block">
+        <h3 class="title is-5"><a href="https://github.com/vision-x-nyu/thinking-in-space" target="_blank" rel="noreferrer">VSI-Bench</a> Examples</h3>
+        <div class="image-frame tall-frame">
+          <a href="./assets/static-qualitative.png" target="_blank" rel="noreferrer">
+            <img src="./assets/static-qualitative.png" alt="Static qualitative results.">
+          </a>
+        </div>
+      </div>
+
+      <div class="paper-card qualitative-block">
+        <h3 class="title is-5"><a href="https://github.com/TencentARC/DSR_Suite" target="_blank" rel="noreferrer">DSR-Bench</a> Examples</h3>
+        <div class="image-frame tall-frame">
+          <a href="./assets/dynamic-qualitative.png" target="_blank" rel="noreferrer">
+            <img src="./assets/dynamic-qualitative.png" alt="Dynamic qualitative results.">
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="paper-card ambiguity-block">
+      <h3 class="title is-5">Ambiguity Cases</h3>
+      <p class="case-text ambiguity-intro">
+        We highlight benchmark questions that remain ambiguous from the visual evidence itself, which may limit annotation quality and evaluation reliability.
+      </p>
+
+      <div class="ambiguity-stack">
+        <div class="ambiguity-case">
+          <div class="image-frame ambiguity-frame">
+            <a href="./assets/case1.png" target="_blank" rel="noreferrer">
+              <img src="./assets/case1.png" alt="Ambiguous speed comparison case.">
+            </a>
+          </div>
+          <p class="case-text case-note">
+            <strong>Case 1.</strong> Speed comparison can remain ambiguous when two entities move at visually similar speeds.
+          </p>
+        </div>
+
+        <div class="ambiguity-case">
+          <div class="image-frame ambiguity-frame">
+            <a href="./assets/case2.png" target="_blank" rel="noreferrer">
+              <img src="./assets/case2.png" alt="Ambiguous occlusion case.">
+            </a>
+          </div>
+          <p class="case-text case-note">
+            <strong>Case 2.</strong> Occlusion can make relative spatial relations difficult to judge, even when the benchmark expects a single answer.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop content">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title has-text-centered">BibTeX</h2>
+        <pre><code id="bibtex-block">@misc{zhang2026geosr,
+  title  = {Make Geometry Matter for Spatial Reasoning},
+  author = {Shihua Zhang and Qiuhong Shen and Shizun Wang and Tianbo Pan and Xinchao Wang},
+  year   = {2026},
+  note   = {Project page and manuscript draft}
+}</code></pre>
+        <div class="has-text-centered bibtex-actions">
+          <button id="copy-bibtex" class="button is-dark is-rounded" type="button">Copy BibTeX</button>
+          <p id="copy-status" class="copy-status">Ready to copy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://github.com/SuhZhang/GeoSR" target="_blank" rel="noreferrer">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            Make Geometry Matter for Spatial Reasoning
+          </p>
+          <p>
+            This page is adapted from the
+            <a href="https://nerfies.github.io/" target="_blank" rel="noreferrer">Nerfies project page template</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
