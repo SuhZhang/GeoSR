@@ -193,6 +193,10 @@ If you find this repository useful, please consider citing:
 }
 ```
 
+## License
+
+This project is released under the [Apache 2.0 License](LICENSE).
+
 ## Acknowledgement
 
 GeoSR is built on top of recent progress in geometry-aware spatial reasoning, especially the static pipeline represented by [VG-LLM](https://github.com/LaVi-Lab/VG-LLM) and the dynamic pipeline represented by [GSM / DSR Suite](https://github.com/TencentARC/DSR_Suite). We also thank the benchmark creators of [VSI-Bench](https://github.com/vision-x-nyu/thinking-in-space) and [DSR-Bench](https://huggingface.co/datasets/TencentARC/DSR_Suite-Data) for making their code and datasets available.
