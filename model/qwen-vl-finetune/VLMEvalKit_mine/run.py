@@ -504,7 +504,7 @@ if __name__ == '__main__':
     main()
 
 
-# CUDA_VISIBLE_DEVICES=0 python run.py --data Spatial-Reasoning --model Qwen2.5-VL-7B-Instruct-ForVideo-Spatial --work-dir ./outputs
+# python run.py --data Spatial-Reasoning --model Qwen2.5-VL-7B-Instruct-ForVideo-Spatial --work-dir ./outputs
 
 
 
