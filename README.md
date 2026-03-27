@@ -145,15 +145,86 @@ Install the download client if needed:
 pip install -U huggingface_hub
 ```
 
-Download the dynamic checkpoint to the default location used by the evaluator:
+Download the static checkpoint:
+
+```bash
+python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='SuhZhang/GeoSR-Model', local_dir='data/models', allow_patterns=['GeoSR3D-Model/*'])"
+```
+
+Download the dynamic checkpoint:
 
 ```bash
 python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='SuhZhang/GeoSR-Model', local_dir='data/models', allow_patterns=['GeoSR4D-Model/*'])"
 ```
 
-This creates `data/models/GeoSR4D-Model`, which matches the built-in default model path in `model/qwen-vl-finetune/VLMEvalKit_mine/vlmeval/config.py`.
+After download, the released checkpoints should be available at:
 
-If you instead evaluate a custom local checkpoint, set `GEOSR4D_EVAL_MODEL_PATH` explicitly.
+- `data/models/GeoSR3D-Model`
+- `data/models/GeoSR4D-Model`
+
+## Training and Evaluation
+
+Below are direct command examples for the two task-specific branches. Each block starts from the repository root so that the commands can be copied and run as-is.
+
+### Static Branch
+
+Train GeoSR for static spatial reasoning:
+
+```bash
+cd GeoSR
+git checkout static
+
+bash scripts/train/train.sh \
+  --vision-mask-apply-prob 0.5 \
+  --vision-mask-prob 0.8 \
+  --output-dir ./outputs/geosr3d_train
+```
+
+Evaluate the static model on `VSI-Bench`:
+
+```bash
+cd GeoSR
+git checkout static
+
+MODEL_PATH=./data/models/GeoSR3D-Model \
+BENCHMARK=vsibench \
+OUTPUT_PATH=./outputs/eval_static \
+bash scripts/evaluation/eval.sh
+```
+
+If you want to evaluate a newly trained local checkpoint instead, set `MODEL_PATH` to that checkpoint directory such as `./outputs/geosr3d_train`.
+
+### Dynamic Branch
+
+Train GeoSR for dynamic spatial reasoning:
+
+```bash
+cd GeoSR
+git checkout dynamic
+cd model/qwen-vl-finetune
+
+bash train.sh \
+  --vision-mask-prob 0.8 \
+  --vision-mask-apply-prob 0.5 \
+  --output-dir ./outputs/geosr4d_train
+```
+
+Evaluate the dynamic model on `DSR-Bench`:
+
+```bash
+cd GeoSR
+git checkout dynamic
+cd model/qwen-vl-finetune/VLMEvalKit_mine
+
+GEOSR4D_BENCH_VIDEO_ROOT=../../../data/DSR_Suite/videos_bench \
+GEOSR4D_BENCH_PARQUET=../../../data/DSR_Suite/benchmark.parquet \
+python run.py \
+  --data Spatial-Reasoning \
+  --model Qwen2.5-VL-7B-Instruct-ForVideo-Spatial \
+  --work-dir ./outputs
+```
+
+If the released checkpoint is downloaded to `data/models/GeoSR4D-Model`, the dynamic evaluator will discover it automatically through its built-in default path. For a custom checkpoint, set `GEOSR4D_EVAL_MODEL_PATH` explicitly.
 
 ## Abstract
 
