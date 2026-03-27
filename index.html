@@ -130,6 +130,30 @@
       text-underline-offset: 2px;
     }
 
+    .video-section {
+      padding-top: 0.85rem;
+      padding-bottom: 3rem;
+    }
+
+    .video-card {
+      padding: 1rem;
+    }
+
+    .video-frame {
+      overflow: hidden;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .video-frame video {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      background: #000000;
+    }
+
     /* ---------- Responsive ---------- */
     @media screen and (max-width: 1023px) {
       .method-combined-card .method-columns {
@@ -238,6 +262,31 @@
                 <span>BibTeX</span>
               </a>
             </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section video-section">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Project Video</p>
+      <h2 class="title is-3 section-title">Introduction Video</h2>
+      <p class="section-copy">
+        A concise walkthrough of GeoSR for spatial reasoning in both static scenes and dynamic videos.
+      </p>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="paper-card video-card">
+          <div class="video-frame">
+            <video controls playsinline preload="metadata">
+              <source src="./assets/video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </div>
@@ -544,8 +593,7 @@
         <pre><code id="bibtex-block">@misc{zhang2026geosr,
   title  = {Make Geometry Matter for Spatial Reasoning},
   author = {Shihua Zhang and Qiuhong Shen and Shizun Wang and Tianbo Pan and Xinchao Wang},
-  year   = {2026},
-  note   = {Project page and manuscript draft}
+  year   = {2026}
 }</code></pre>
         <div class="has-text-centered bibtex-actions">
           <button id="copy-bibtex" class="button is-dark is-rounded" type="button">Copy BibTeX</button>
