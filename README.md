@@ -4,6 +4,9 @@
   <a href="https://github.com/SuhZhang/GeoSR" target="_blank">
     <img alt="Code" src="https://img.shields.io/badge/Code-GeoSR-black?logo=github" height="20" />
   </a>
+  <a href="https://huggingface.co/SuhZhang/GeoSR-Model" target="_blank">
+    <img alt="HF Model" src="https://img.shields.io/badge/Hugging%20Face-GeoSR--Model-FFD21E?logo=huggingface&logoColor=black" height="20" />
+  </a>
   <a href="https://suhzhang.github.io/GeoSR/" target="_blank">
     <img alt="Project Page" src="https://img.shields.io/badge/Project-Page-0A7EA4" height="20" />
   </a>
