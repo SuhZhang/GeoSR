@@ -135,6 +135,26 @@ Notes:
 - `train_qa_pairs.json` / `train_qa_pairs.parquet` are the released training QA files.
 - The corresponding videos should be downloaded directly from the official [Koala-36M](https://github.com/KlingTeam/Koala-36M) release instead of being regenerated in this repository.
 
+## Model Download
+
+Released checkpoints are hosted in [SuhZhang/GeoSR-Model](https://huggingface.co/SuhZhang/GeoSR-Model).
+
+Install the download client if needed:
+
+```bash
+pip install -U huggingface_hub
+```
+
+Download the dynamic checkpoint to the default location used by the evaluator:
+
+```bash
+python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='SuhZhang/GeoSR-Model', local_dir='data/models', allow_patterns=['GeoSR4D-Model/*'])"
+```
+
+This creates `data/models/GeoSR4D-Model`, which matches the built-in default model path in `model/qwen-vl-finetune/VLMEvalKit_mine/vlmeval/config.py`.
+
+If you instead evaluate a custom local checkpoint, set `GEOSR4D_EVAL_MODEL_PATH` explicitly.
+
 ## Abstract
 
 Empowered by large-scale training, VLMs have achieved strong image and video understanding, yet their ability to perform spatial reasoning in both static scenes and dynamic videos remains limited. Recent approaches attempt to improve this by injecting geometry tokens from pretrained 3D foundation models into VLMs. However, we find that naive geometry fusion followed by standard fine-tuning often leaves these cues underused, because the model can still rely on appearance-driven 2D shortcuts.
