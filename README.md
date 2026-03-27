@@ -135,6 +135,33 @@ Notes:
 - `train_qa_pairs.json` / `train_qa_pairs.parquet` are the released training QA files.
 - The corresponding videos should be downloaded directly from the official [Koala-36M](https://github.com/KlingTeam/Koala-36M) release instead of being regenerated in this repository.
 
+## Model Download
+
+Released checkpoints are hosted in [SuhZhang/GeoSR-Model](https://huggingface.co/SuhZhang/GeoSR-Model).
+
+Install the download client if needed:
+
+```bash
+pip install -U huggingface_hub
+```
+
+Download the static checkpoint:
+
+```bash
+python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='SuhZhang/GeoSR-Model', local_dir='data/models', allow_patterns=['GeoSR3D-Model/*'])"
+```
+
+Download the dynamic checkpoint:
+
+```bash
+python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='SuhZhang/GeoSR-Model', local_dir='data/models', allow_patterns=['GeoSR4D-Model/*'])"
+```
+
+After download, the released checkpoints should be available at:
+
+- `data/models/GeoSR3D-Model`
+- `data/models/GeoSR4D-Model`
+
 ## Training and Evaluation
 
 Below are direct command examples for the two task-specific branches. Each block starts from the repository root so that the commands can be copied and run as-is.
@@ -159,11 +186,13 @@ Evaluate the static model on `VSI-Bench`:
 cd GeoSR
 git checkout static
 
-MODEL_PATH=./outputs/geosr3d_train \
+MODEL_PATH=./data/models/GeoSR3D-Model \
 BENCHMARK=vsibench \
 OUTPUT_PATH=./outputs/eval_static \
 bash scripts/evaluation/eval.sh
 ```
+
+If you want to evaluate a newly trained local checkpoint instead, set `MODEL_PATH` to that checkpoint directory such as `./outputs/geosr3d_train`.
 
 ### Dynamic Branch
 
@@ -189,12 +218,13 @@ cd model/qwen-vl-finetune/VLMEvalKit_mine
 
 GEOSR4D_BENCH_VIDEO_ROOT=../../../data/DSR_Suite/videos_bench \
 GEOSR4D_BENCH_PARQUET=../../../data/DSR_Suite/benchmark.parquet \
-GEOSR4D_EVAL_MODEL_PATH=../outputs/geosr4d_train \
 python run.py \
   --data Spatial-Reasoning \
   --model Qwen2.5-VL-7B-Instruct-ForVideo-Spatial \
   --work-dir ./outputs
 ```
+
+If the released checkpoint is downloaded to `data/models/GeoSR4D-Model`, the dynamic evaluator will discover it automatically through its built-in default path. For a custom checkpoint, set `GEOSR4D_EVAL_MODEL_PATH` explicitly.
 
 ## Abstract
 
