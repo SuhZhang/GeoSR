@@ -27,6 +27,10 @@
   <a href="https://sites.google.com/site/sitexinchaowang/" target="_blank">xML Lab</a>, Department of Electrical and Computer Engineering, National University of Singapore
 </div>
 
+<div align="center">
+  <strong>Accepted to ECCV 2026.</strong>
+</div>
+
 <br>
 
 GeoSR is a geometry-aware framework for spatial reasoning with vision-language models (VLMs). It targets both static scenes and dynamic videos, and is built around a simple observation from our paper: under naive token fusion and standard fine-tuning, geometry tokens are often underutilized, and can even become harmful in dynamic settings. GeoSR addresses this issue with two complementary designs:
