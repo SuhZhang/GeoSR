@@ -19,14 +19,17 @@
   <style>
     /* ---------- Hero title: force one line ---------- */
     .publication-title.one-line-title {
+      display: block;
+      width: max-content;
       white-space: nowrap;
       font-size: clamp(1.6rem, 3vw, 3.1rem) !important;
       line-height: 1.1;
-      letter-spacing: -0.03em;
+      letter-spacing: 0;
       font-weight: 700;
+      text-align: center;
       word-break: keep-all;
       overflow-wrap: normal;
-      max-width: 1150px;
+      max-width: 100%;
       margin: 0 auto 1rem auto;
     }
 
@@ -232,8 +235,10 @@
             <span class="author-block">Department of Electrical and Computer Engineering, National University of Singapore</span>
           </div>
 
+          <p class="publication-venue">Accepted to ECCV 2026.</p>
+
           <div class="is-size-6 publication-authors publication-note">
-            <span class="author-block">Accepted to ECCV 2026. GeoSR encourages VLMs to actively reason with geometry in both static and dynamic spatial settings.</span>
+            <span class="author-block">GeoSR encourages VLMs to actively reason with geometry in both static and dynamic spatial settings.</span>
           </div>
 
           <div class="publication-links">

@@ -63,7 +63,7 @@ a:hover {
   font-family: 'Google Sans', sans-serif;
   font-size: clamp(2.8rem, 5vw, 4.5rem);
   line-height: 1.03;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .publication-authors,
@@ -75,6 +75,14 @@ a:hover {
 .publication-note {
   margin-top: 0.85rem;
   color: #526178;
+}
+
+.publication-venue {
+  margin-top: 0.85rem;
+  color: #0f766e;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .author-block {
@@ -111,7 +119,7 @@ a:hover {
   margin-top: 0.45rem !important;
   margin-bottom: 0.75rem !important;
   font-family: 'Google Sans', sans-serif;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 .section-copy {
