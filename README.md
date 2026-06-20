@@ -290,14 +290,11 @@ All experiments are conducted on `4 x H200` GPUs with `141 GB` memory each. Trai
 If you find this repository useful, please consider citing:
 
 ```bibtex
-@misc{zhang2026geosr,
-  title={Make Geometry Matter for Spatial Reasoning},
-  author={Shihua Zhang and Qiuhong Shen and Shizun Wang and Tianbo Pan and Xinchao Wang},
-  year={2026},
-  eprint={2603.26639},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2603.26639}
+@inproceedings{zhang2026geosr,
+  title     = {Make Geometry Matter for Spatial Reasoning},
+  author    = {Zhang, Shihua and Shen, Qiuhong and Wang, Shizun and Pan, Tianbo and Wang, Xinchao},
+  booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
+  year      = {2026}
 }
 ```
 
