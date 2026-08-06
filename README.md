@@ -13,6 +13,7 @@
   <a href="https://suhzhang.github.io/GeoSR/" target="_blank">
     <img alt="Project Page" src="https://img.shields.io/badge/Project-Page-0A7EA4" height="20" />
   </a>
+  <img alt="ECCV 2026 Oral" src="https://img.shields.io/badge/ECCV%202026-Oral-dc2626" height="20" />
 </div>
 
 <div align="center">
@@ -28,7 +29,7 @@
 </div>
 
 <div align="center">
-  <strong>Accepted to ECCV 2026.</strong>
+  <strong>Accepted to ECCV 2026 as a Long Oral Presentation.</strong>
 </div>
 
 <br>
